@@ -71,7 +71,7 @@ public class GameService {
 
         Game savedGame = gameRepository.save(game);
         log.info("Rolled dice for game {}: {} (rolls left: {})", gameId, newDice, savedGame.getRollsLeft());
-
+        log.error("Risky business");
         return convertToDto(savedGame);
     }
 
