@@ -8,7 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "games")
@@ -21,7 +20,12 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "player_name", nullable = false)
+    // Link to User instead of just player name
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Column(name = "player_name", nullable = false) // Keep for backward compatibility
     private String playerName;
 
     @Column(name = "current_round")
@@ -68,19 +72,19 @@ public class Game {
     private Integer upperTotal = 0;
 
     @Column(name = "three_of_kind")
-    private Integer threeOfKind;
+    private Integer threeofkind;
 
     @Column(name = "four_of_kind")
-    private Integer fourOfKind;
+    private Integer fourofkind;
 
     @Column(name = "full_house")
-    private Integer fullHouse;
+    private Integer fullhouse;
 
     @Column(name = "small_straight")
-    private Integer smallStraight;
+    private Integer smallstraight;
 
     @Column(name = "large_straight")
-    private Integer largeStraight;
+    private Integer largestraight;
 
     @Column(name = "yahtzee")
     private Integer yahtzee;
@@ -98,4 +102,13 @@ public class Game {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    // Helper methods
+    public boolean belongsToUser(Long userId) {
+        return this.user != null && this.user.getId().equals(userId);
+    }
+
+    public boolean belongsToUser(User user) {
+        return this.user != null && this.user.getId().equals(user.getId());
+    }
 }
